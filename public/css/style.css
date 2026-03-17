@@ -319,3 +319,29 @@ p, li, address p { color: #333; margin-bottom: 10px; }
     flex-direction: column;
   }
 }
+/* Member registration form */
+.member-form {
+  display: grid;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.form-row {
+  display: grid;
+  gap: 6px;
+}
+
+.form-row input,
+.form-row select {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+
+#member-message {
+  min-height: 1.2em;
+  margin-top: 8px;
+  font-weight: 600;
+}

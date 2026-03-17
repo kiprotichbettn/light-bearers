@@ -3,6 +3,8 @@
 require("dotenv").config();
 const fetch = require("node-fetch");
 const express = require("express");
+const path = require("path");
+const mongoose = require("mongoose");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -11,6 +13,12 @@ const API_KEY = process.env.BIBLE_API_KEY;
 const BIBLE_ID = "de4e12af7f28f599-02"; // KJV or ESV
 const apiKey = process.env.YOUTUBE_API_KEY;
 const playlistIds = process.env.YOUTUBE_PLAYLIST_IDS.split(','); // Comma-separated in .env
+
+
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch(err => console.error("❌ DB error:", err));
+
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
@@ -39,9 +47,13 @@ function extractRandomVerse(htmlContent) {
   return verses[getRandomInt(verses.length)];
 }
 
-app.use(express.static("public"));
+//app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+const membersRoute = require("./routes/members");
+app.use("/api/members", membersRoute);
 
 // Bible verse API
 app.get("/api/bible-verse", async (req, res) => {
