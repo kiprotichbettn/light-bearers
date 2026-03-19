@@ -28,7 +28,7 @@
       </p>
     </header>
 
-    <!-- MAIN CONTENT -->
+    <!-- MAIN -->
     <main class="container">
       <section>
         <h2>Register as a Member</h2>
@@ -37,22 +37,22 @@
 
           <div class="form-row">
             <label for="fullName">Full Name *</label>
-            <input id="fullName" type="text" required />
+            <input id="fullName" name="fullName" type="text" required />
           </div>
 
           <div class="form-row">
             <label for="email">Email *</label>
-            <input id="email" type="email" required />
+            <input id="email" name="email" type="email" required />
           </div>
 
           <div class="form-row">
             <label for="phone">Phone</label>
-            <input id="phone" type="tel" />
+            <input id="phone" name="phone" type="tel" />
           </div>
 
           <div class="form-row">
             <label for="ageRange">Age Range *</label>
-            <select id="ageRange" required>
+            <select id="ageRange" name="ageRange" required>
               <option value="" disabled selected>Select...</option>
               <option value="Under 18">Under 18</option>
               <option value="18-24">18-24</option>
@@ -64,17 +64,17 @@
 
           <div class="form-row">
             <label for="county">County *</label>
-            <input id="county" type="text" required />
+            <input id="county" name="county" type="text" required />
           </div>
 
           <div class="form-row">
             <label for="country">Country</label>
-            <input id="country" type="text" value="Kenya" />
+            <input id="country" name="country" type="text" value="Kenya" />
           </div>
 
           <div class="form-row">
             <label for="chapter">Chapter</label>
-            <input id="chapter" type="text" />
+            <input id="chapter" name="chapter" type="text" />
           </div>
 
           <button type="submit" class="program-btn">
@@ -84,7 +84,6 @@
           <p id="member-message" role="status" aria-live="polite"></p>
         </form>
 
-        <!-- Google Form fallback -->
         <p class="muted">
           Prefer Google Form instead?
           <a
@@ -98,13 +97,60 @@
       </section>
     </main>
 
-    <!-- FOOTER -->
     <footer class="site-footer">
       <p>&copy; 2025 Light Bearers. All Rights Reserved.</p>
     </footer>
 
   </div>
 
-  <script src="./js/index.js"></script>
+  <!-- 🔥 FORM LOGIC -->
+  <script>
+    const form = document.getElementById("member-form");
+    const message = document.getElementById("member-message");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      message.textContent = "Submitting...";
+
+      const data = {
+        fullName: form.fullName.value,
+        email: form.email.value,
+        phone: form.phone.value,
+        ageRange: form.ageRange.value,
+        county: form.county.value,
+        country: form.country.value,
+        chapter: form.chapter.value,
+        source: "website"
+      };
+
+      try {
+        const res = await fetch("/api/members", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+
+        const result = await res.json();
+
+        if (res.ok) {
+          message.style.color = "green";
+          message.textContent = "✅ Registration successful!";
+          form.reset();
+        } else {
+          message.style.color = "red";
+          message.textContent = result.error || "Registration failed.";
+        }
+
+      } catch (error) {
+        console.error(error);
+        message.style.color = "red";
+        message.textContent = "❌ Network error. Try again.";
+      }
+    });
+  </script>
+
 </body>
 </html>

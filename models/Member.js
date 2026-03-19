@@ -2,7 +2,7 @@
 
 const mongoose = require("mongoose");
 
-const AGE_RANGES = ["Under 18", "18-24", "25-34", "35-44", "45+"]; // keep consistent
+const AGE_RANGES = ["Under 18", "18-24", "25-34", "35-44", "45+"];
 const SOURCES = ["website", "google_form", "admin"];
 
 const MemberSchema = new mongoose.Schema(
@@ -29,6 +29,7 @@ const MemberSchema = new mongoose.Schema(
       type: String,
       trim: true,
       maxlength: [30, "phone must be at most 30 characters"],
+      match: [/^[\d+\-\s()]+$/, "phone contains invalid characters"],
     },
 
     ageRange: {
@@ -62,7 +63,10 @@ const MemberSchema = new mongoose.Schema(
       maxlength: [80, "chapter must be at most 80 characters"],
     },
 
-    interests: [{ type: String, trim: true }],
+    interests: {
+      type: [String],
+      default: [],
+    },
 
     source: {
       type: String,
@@ -72,14 +76,56 @@ const MemberSchema = new mongoose.Schema(
       },
       default: "website",
     },
+
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+
+    joinedAt: {
+      type: Date,
+      default: Date.now,
+    },
+
+    notes: {
+      type: String,
+      trim: true,
+      maxlength: [500, "notes must be at most 500 characters"],
+    },
   },
   { timestamps: true }
 );
 
-// Normalize fullName spacing
 MemberSchema.pre("validate", function () {
-  if (this.fullName) this.fullName = this.fullName.replace(/\s+/g, " ").trim();
+  if (this.fullName) {
+    this.fullName = this.fullName.replace(/\s+/g, " ").trim();
+  }
+
+  if (this.county) {
+    this.county = this.county.replace(/\s+/g, " ").trim();
+  }
+
+  if (this.country) {
+    this.country = this.country.replace(/\s+/g, " ").trim();
+  }
+
+  if (this.chapter) {
+    this.chapter = this.chapter.replace(/\s+/g, " ").trim();
+  }
+
+  if (this.notes) {
+    this.notes = this.notes.replace(/\s+/g, " ").trim();
+  }
+
+  if (Array.isArray(this.interests)) {
+    this.interests = [
+      ...new Set(
+        this.interests
+          .map((item) => String(item).replace(/\s+/g, " ").trim())
+          .filter(Boolean)
+      ),
+    ];
+  }
 });
 
-// Explicit collection name "members"
 module.exports = mongoose.model("Member", MemberSchema, "members");

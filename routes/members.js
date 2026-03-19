@@ -2,10 +2,11 @@
 
 const express = require("express");
 const router = express.Router();
-const Member = require("../models/Member");
+const Member = require("../models/member");
 
 function formatValidationError(err) {
   if (!err?.errors) return null;
+
   return Object.values(err.errors).map((e) => ({
     field: e.path,
     message: e.message,
@@ -15,10 +16,26 @@ function formatValidationError(err) {
 // Create member (POST /api/members)
 router.post("/", async (req, res) => {
   try {
-    const member = await Member.create(req.body);
+    const payload = {
+      fullName: req.body.fullName,
+      email: req.body.email,
+      phone: req.body.phone,
+      ageRange: req.body.ageRange,
+      county: req.body.county,
+      country: req.body.country,
+      chapter: req.body.chapter,
+      interests: req.body.interests,
+      source: req.body.source || "website",
+      isActive: req.body.isActive,
+      joinedAt: req.body.joinedAt,
+      notes: req.body.notes,
+    };
+
+    const member = await Member.create(payload);
 
     return res.status(201).json({
       ok: true,
+      message: "Member registered successfully",
       member: {
         id: member._id,
         fullName: member.fullName,
@@ -30,18 +47,21 @@ router.post("/", async (req, res) => {
         chapter: member.chapter,
         interests: member.interests,
         source: member.source,
+        isActive: member.isActive,
+        joinedAt: member.joinedAt,
+        notes: member.notes,
         createdAt: member.createdAt,
+        updatedAt: member.updatedAt,
       },
     });
   } catch (err) {
-    // Duplicate email error
     if (err?.code === 11000) {
-      return res
-        .status(409)
-        .json({ ok: false, error: "Email already registered" });
+      return res.status(409).json({
+        ok: false,
+        error: "Email already registered",
+      });
     }
 
-    // Mongoose schema validation
     if (err?.name === "ValidationError") {
       return res.status(400).json({
         ok: false,
@@ -51,24 +71,34 @@ router.post("/", async (req, res) => {
     }
 
     console.error("Create member error:", err);
-    return res.status(500).json({ ok: false, error: "Failed to create member" });
+    return res.status(500).json({
+      ok: false,
+      error: "Failed to create member",
+    });
   }
 });
 
-// List members (GET /api/members) - basic admin list
+// List members (GET /api/members)
 router.get("/", async (req, res) => {
   try {
     const members = await Member.find({})
       .select(
-        "fullName email phone ageRange county country chapter interests source createdAt"
+        "fullName email phone ageRange county country chapter interests source isActive joinedAt notes createdAt updatedAt"
       )
       .sort({ createdAt: -1 })
       .limit(200);
 
-    return res.json({ ok: true, members });
+    return res.json({
+      ok: true,
+      count: members.length,
+      members,
+    });
   } catch (err) {
     console.error("List members error:", err);
-    return res.status(500).json({ ok: false, error: "Failed to list members" });
+    return res.status(500).json({
+      ok: false,
+      error: "Failed to list members",
+    });
   }
 });
 

@@ -1,25 +1,38 @@
 "use strict";
 
 require("dotenv").config();
-const fetch = require("node-fetch");
+
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
+const fetch = require("node-fetch");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const API_KEY = process.env.BIBLE_API_KEY;
-const BIBLE_ID = "de4e12af7f28f599-02"; // KJV or ESV
-const apiKey = process.env.YOUTUBE_API_KEY;
-const playlistIds = process.env.YOUTUBE_PLAYLIST_IDS.split(','); // Comma-separated in .env
+// Environment variables
+const bibleApiKey = process.env.BIBLE_API_KEY;
+const bibleId = "de4e12af7f28f599-02";
+const youtubeApiKey = process.env.YOUTUBE_API_KEY;
+const playlistIds = process.env.YOUTUBE_PLAYLIST_IDS
+  ? process.env.YOUTUBE_PLAYLIST_IDS.split(",").map(id => id.trim())
+  : [];
 
-
+// MongoDB connection
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB connected"))
   .catch(err => console.error("❌ DB error:", err));
 
+// Middleware
+app.use(express.static(path.join(__dirname, "public")));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
+// Routes
+const membersRoute = require("./routes/members");
+app.use("/api/members", membersRoute);
+
+// Utility functions
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
@@ -41,26 +54,26 @@ function extractRandomVerse(htmlContent) {
 
   if (verses.length === 0) {
     const plainText = htmlContent.replace(/<[^>]+>/g, "").trim();
-    return { number: null, text: plainText.split(/[.?!]\s/)[0] };
+    return {
+      number: null,
+      text: plainText.split(/[.?!]\s/)[0]
+    };
   }
 
   return verses[getRandomInt(verses.length)];
 }
 
-//app.use(express.static("public"));
-app.use(express.static(path.join(__dirname, "public")));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-
-const membersRoute = require("./routes/members");
-app.use("/api/members", membersRoute);
+// Health check
+app.get("/api/health", (req, res) => {
+  res.status(200).json({ status: "ok", message: "Light Bearers API is running" });
+});
 
 // Bible verse API
 app.get("/api/bible-verse", async (req, res) => {
   try {
-    const booksUrl = `https://api.scripture.api.bible/v1/bibles/${BIBLE_ID}/books`;
+    const booksUrl = `https://api.scripture.api.bible/v1/bibles/${bibleId}/books`;
     const booksRes = await fetch(booksUrl, {
-      headers: { "api-key": API_KEY },
+      headers: { "api-key": bibleApiKey }
     });
     const booksData = await booksRes.json();
 
@@ -70,9 +83,9 @@ app.get("/api/bible-verse", async (req, res) => {
 
     const randomBook = booksData.data[getRandomInt(booksData.data.length)];
 
-    const chaptersUrl = `https://api.scripture.api.bible/v1/bibles/${BIBLE_ID}/books/${randomBook.id}/chapters`;
+    const chaptersUrl = `https://api.scripture.api.bible/v1/bibles/${bibleId}/books/${randomBook.id}/chapters`;
     const chaptersRes = await fetch(chaptersUrl, {
-      headers: { "api-key": API_KEY },
+      headers: { "api-key": bibleApiKey }
     });
     const chaptersData = await chaptersRes.json();
 
@@ -82,9 +95,9 @@ app.get("/api/bible-verse", async (req, res) => {
 
     const randomChapter = chaptersData.data[getRandomInt(chaptersData.data.length)];
 
-    const passageUrl = `https://api.scripture.api.bible/v1/bibles/${BIBLE_ID}/passages/${randomChapter.id}`;
+    const passageUrl = `https://api.scripture.api.bible/v1/bibles/${bibleId}/passages/${randomChapter.id}`;
     const passageRes = await fetch(passageUrl, {
-      headers: { "api-key": API_KEY },
+      headers: { "api-key": bibleApiKey }
     });
     const passageData = await passageRes.json();
 
@@ -98,7 +111,7 @@ app.get("/api/bible-verse", async (req, res) => {
     res.json({
       status: 200,
       reference,
-      verse: randomVerse.text,
+      verse: randomVerse.text
     });
   } catch (error) {
     console.error("Error fetching Bible verse:", error);
@@ -106,7 +119,7 @@ app.get("/api/bible-verse", async (req, res) => {
   }
 });
 
-// eBook API route using Gutendex (Project Gutenberg API)
+// eBooks API using Gutendex
 app.get("/api/ebooks", async (req, res) => {
   try {
     const response = await fetch(
@@ -114,7 +127,6 @@ app.get("/api/ebooks", async (req, res) => {
     );
     const data = await response.json();
 
-    // Filter top 10 books and return title + ID
     const ebooks = data.results.slice(0, 10).map(book => ({
       id: book.id,
       title: book.title
@@ -127,26 +139,25 @@ app.get("/api/ebooks", async (req, res) => {
   }
 });
 
-
 // YouTube videos API
-app.get('/api/videos', async (req, res) => {
+app.get("/api/videos", async (req, res) => {
   try {
     const maxResults = 5;
 
     const allPlaylists = await Promise.all(
       playlistIds.map(async (playlistId) => {
         const response = await fetch(
-          `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=${maxResults}&playlistId=${playlistId.trim()}&key=${apiKey}`
+          `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=${maxResults}&playlistId=${playlistId}&key=${youtubeApiKey}`
         );
 
         const data = await response.json();
 
         return {
-          playlistId: playlistId.trim(),
+          playlistId,
           videos: data.items?.map(item => ({
             title: item.snippet.title,
             videoId: item.snippet.resourceId.videoId,
-            thumbnail: item.snippet.thumbnails?.medium?.url,
+            thumbnail: item.snippet.thumbnails?.medium?.url
           })) || []
         };
       })
@@ -154,9 +165,14 @@ app.get('/api/videos', async (req, res) => {
 
     res.json(allPlaylists);
   } catch (error) {
-    console.error('Error fetching videos:', error);
-    res.status(500).json({ error: 'Failed to fetch videos' });
+    console.error("Error fetching videos:", error);
+    res.status(500).json({ error: "Failed to fetch videos" });
   }
+});
+
+// API 404 handler
+app.use("/api", (req, res) => {
+  res.status(404).json({ error: "API route not found" });
 });
 
 app.listen(PORT, () => {

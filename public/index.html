@@ -17,233 +17,322 @@
         <nav class="primary-nav" role="navigation" aria-label="Main navigation">
           <ul class="nav-list">
             <li><a class="nav-link" href="#home">Home</a></li>
-            <li><a href="#about-us">About Us</a></li>
-            
-            <li class="nav-item dropdown" tabindex="0">
-              <button class="dropbtn" aria-expanded="false" aria-controls="services-menu">Services ▾</button>
-              <ul id="services-menu" class="dropdown-menu" role="menu" aria-label="Services">
-                <li role="none"><a role="menuitem" href="#academic-support">Academic Support</a></li>
-                <li role="none"><a role="menuitem" href="#career-development">Career Development</a></li>
-                <li role="none"><a role="menuitem" href="#community-outreach">Community Outreach</a></li>
-                <li role="none"><a role="menuitem" href="#mentorship-programs">Mentorship Programs</a></li>
-              </ul>
-            </li>
-
+            <li><a class="nav-link" href="#about-us">About Us</a></li>
+            <li><a class="nav-link" href="#programs">Programs</a></li>
+            <li><a class="nav-link" href="#leadership">Leadership</a></li>
+            <li><a class="nav-link" href="#resources">Resources</a></li>
             <li><a class="nav-link" id="nav-contact" href="#contact-section">Contact</a></li>
-
             <li>
-              <a class="nav-link register-btn"
-                href="/register.html"
-                target="_blank">
+              <a class="nav-link register-btn" href="/register.html" target="_blank">
                 📋 Register Now
               </a>
             </li>
           </ul>
         </nav>
       </div>
-
-      <p id="greeting" class="site-tagline">Empowering Students for Social, Economic, and Academic Growth</p>
     </header>
 
-    <main class="layout container" id="home">
-      <!-- LEFT SIDEBAR -->
-      <aside class="sidebar left-sidebar" aria-label="Quick links">
-        <h2>Quick Links</h2>
-        <ul class="quick-links">
-          <li><a href="#programs">Programs</a></li>
-          <li><a href="#video-library-heading">Video Library</a></li>
-          <li><a href="#ebooks-heading">eBooks</a></li>
-          <li><a href="#archives-heading">Archives</a></li>
-          <li><a href="#events-announcements">Announcements</a></li>
-        </ul>
+    <main id="home">
+      <section class="hero">
+        <div class="hero-content">
+          <span class="hero-badge">Community • Mentorship • Growth</span>
+          <h1>Empowering Youth for Social, Economic, and Academic Growth</h1>
+          <p>
+            Light Bearers supports young people through mentorship, academic guidance,
+            leadership development, and community-based opportunities that help them grow with purpose.
+          </p>
 
-        <hr/>
-
-        <div class="mini-cta">
-          <a class="download-btn" href="/Downloadable/LB Constitution.pdf" download>📄 Download Constitution</a>
+          <div class="hero-actions">
+            <a class="hero-btn primary" href="/register.html" target="_blank">📋 Register Now</a>
+            <a class="hero-btn secondary" href="/Downloadable/LB Constitution.pdf" download>
+              📄 Download Constitution
+            </a>
+          </div>
         </div>
-      </aside>
+      </section>
 
-      <!-- MAIN CONTENT -->
-      <article class="main-content" role="main">
-        <section id="about-us">
+      <section class="section-shell intro-links">
+        <div class="section-header">
+          <p class="section-kicker">Quick Access</p>
+          <h2>Explore Light Bearers</h2>
+        </div>
+
+        <div class="quick-card-grid">
+          <a class="quick-card" href="#programs">
+            <h3>Programs</h3>
+            <p>Academic support, mentoring, outreach, and career development.</p>
+          </a>
+
+          <a class="quick-card" href="#resources">
+            <h3>Resources</h3>
+            <p>Video library, Christian eBooks, and daily Bible encouragement.</p>
+          </a>
+
+          <a class="quick-card" href="#events-announcements">
+            <h3>Announcements</h3>
+            <p>Stay updated on upcoming events, opportunities, and key notices.</p>
+          </a>
+
+          <a class="quick-card" href="#archives-heading">
+            <h3>Archives</h3>
+            <p>Explore memorable moments from our outreach and mentorship journey.</p>
+          </a>
+        </div>
+      </section>
+
+      <section class="section-shell about-mission-grid">
+        <section id="about-us" class="content-card">
+          <p class="section-kicker">Who We Are</p>
           <h2>About Us</h2>
           <p>
             Light Bearers is a community-driven organization dedicated to equipping young people
-            with the tools, values, and opportunities they need to grow spiritually, academically, 
-            and professionally. We believe in empowering the next generation to be leaders of 
+            with the tools, values, and opportunities they need to grow spiritually, academically,
+            and professionally. We believe in empowering the next generation to be leaders of
             integrity and purpose.
-          </p>       
+          </p>
         </section>
 
-        <!-- Mission -->
-        <section id="mission" aria-labelledby="mission-heading">
+        <section id="mission" class="content-card" aria-labelledby="mission-heading">
+          <p class="section-kicker">Our Purpose</p>
           <h2 id="mission-heading">Our Mission</h2>
-          <p>We are a community-based organization (CBO) focused on creating opportunities for high school and university students to thrive academically, socially, and economically.</p>
-          
+          <p>
+            We are a community-based organization focused on creating opportunities for high school
+            and university students to thrive academically, socially, and economically.
+          </p>
         </section>
+      </section>
 
-        <!-- Programs -->
-        <section id="programs" aria-labelledby="programs-heading">
+      <section id="programs" class="section-shell" aria-labelledby="programs-heading">
+        <div class="section-header">
+          <p class="section-kicker">What We Do</p>
           <h2 id="programs-heading">Programs</h2>
-          <ul class="program-list">
-            <li><button class="program-btn" data-program="academic">Academic Support</button></li>
-            <li><button class="program-btn" data-program="career">Career Development</button></li>
-            <li><button class="program-btn" data-program="community">Community Outreach</button></li>
-            <li><button class="program-btn" data-program="mentorship">Mentorship Programs</button></li>
-          </ul>
-          <div id="program-details" class="program-details" aria-live="polite"></div>
-        </section>
+          <p>Our programs are designed to support growth in education, leadership, and service.</p>
+        </div>
 
-        <!-- Leadership -->
-        <section id="leadership" aria-labelledby="leadership-heading">
-          <h2 id="leadership-heading">Messages from Our Leadership</h2>
+        <div class="program-card-grid">
+          <button class="program-card program-btn" data-program="academic">
+            <h3>Academic Support</h3>
+            <p>Tutoring, study support, and academic development opportunities.</p>
+          </button>
 
-          <article class="leadership-message" aria-labelledby="ceo-heading">
-            <img class="leader-photo" src="https://i.imgur.com/geq0W4Y.jpeg" alt="CEO Diana">
-            <div>
-              <h3 id="ceo-heading">Message from the CEO</h3>
-              <p>Welcome to Light Bearers! We want to help students grow not just by learning, but by taking responsibility in everything 
-                they do. Being disciplined and making thoughtful choices matters in school and in life. Our programs focus on building
-                 these habits so students can become strong, caring leaders who make a difference. Every step we take is about acting with purpose and respect. We believe this is the key to true success....
-                <strong>CEO, Diana Chelangat</strong></p>
+          <button class="program-card program-btn" data-program="career">
+            <h3>Career Development</h3>
+            <p>Career readiness, job search guidance, and professional growth support.</p>
+          </button>
+
+          <button class="program-card program-btn" data-program="community">
+            <h3>Community Outreach</h3>
+            <p>Programs that encourage service, social responsibility, and positive impact.</p>
+          </button>
+
+          <button class="program-card program-btn" data-program="mentorship">
+            <h3>Mentorship Programs</h3>
+            <p>Guidance and encouragement through meaningful mentor relationships.</p>
+          </button>
+        </div>
+
+        <div id="program-details" class="program-details" aria-live="polite"></div>
+      </section>
+
+      <section id="leadership" class="section-shell" aria-labelledby="leadership-heading">
+        <div class="section-header">
+          <p class="section-kicker">Our Team</p>
+          <h2 id="leadership-heading">Leadership</h2>
+          <p>Meet the leaders helping guide Light Bearers with vision, service, and purpose.</p>
+        </div>
+
+        <div class="leadership-grid">
+          <article class="leader-card">
+            <img class="leader-photo" src="https://i.imgur.com/geq0W4Y.jpeg" alt="CEO Diana Chelangat">
+            <div class="leader-card-body">
+              <h3>Diana Chelangat</h3>
+              <p class="leader-role">CEO</p>
+              <p>
+                We want to help students grow not only in knowledge, but in discipline, responsibility,
+                and leadership so they can make a meaningful difference in their communities.
+              </p>
             </div>
           </article>
 
-          <article class="leadership-message" aria-labelledby="patronheading">
-            <img class="leader-photo" src="https://imgur.com/6LL5Sqj.jpeg" alt="SPatron Engineer Rev. Linus Tonui">
-            <div>
-              <h3 id="patron-heading">Message from the Patron</h3>
-              <p>Our commitment is to transparency, unity, and sustainable development in every community...
-                 <strong>Patron, Engineer Rev. Linus Tonui</strong></p>
+          <article class="leader-card">
+            <img class="leader-photo" src="/img/patron.jpg" alt="Patron Engineer Rev. Linus Tonui">
+            <div class="leader-card-body">
+              <h3>Engineer Rev. Linus Tonui</h3>
+              <p class="leader-role">Patron</p>
+              <p>
+                Our commitment is to transparency, unity, and sustainable development in every community
+                we serve through Light Bearers initiatives.
+              </p>
             </div>
           </article>
 
-          <article class="leadership-message" aria-labelledby="vice-heading">
+          <article class="leader-card">
             <img class="leader-photo" src="https://imgur.com/PviQyBJ.jpeg" alt="Vice Chairperson">
-            <div>
-              <h3 id="vice-heading">Message from the Vice Chairperson</h3>
-              <p>Our commitment is to transparency, unity, and sustainable development in every community.
-                 <strong>Vice Chairperson</strong></p>
+            <div class="leader-card-body">
+              <h3>Vice Chairperson</h3>
+              <p class="leader-role">Leadership Team</p>
+              <p>
+                We remain committed to building a supportive environment where young people can grow in
+                character, confidence, and purpose.
+              </p>
             </div>
           </article>
-        </section>
+        </div>
+      </section>
 
-        <!-- Branches -->
-        <section id="branches" aria-labelledby="branches-heading">
-            <h2 id="branches-heading">Our Satellite Branches</h2>
-            <p>We have two upcoming stelite branches that focus on different areas of support. Explore more about our other locations:</p>
-            <ul>
-                <li><a class="branch-link" href="#top" aria-label="Go to top of the page">KCO (Main Branch)</a></li>
-                <li><a class="branch-link" href="branches.html" target="_blank" >Branch 1: Meru</a></li>
-                <li><a class="branch-link" href="branches.html" target="_blank" >Branch 2: Nakuru</a></li>
-            </ul>
-        </section>
+      <section id="branches" class="section-shell" aria-labelledby="branches-heading">
+        <div class="section-header">
+          <p class="section-kicker">Where We Serve</p>
+          <h2 id="branches-heading">Our Satellite Branches</h2>
+          <p>Explore our branches and growing areas of support.</p>
+        </div>
 
-        <!-- Video Library -->
-        <section id="video-library" aria-labelledby="video-library-heading">
-          <h2 id="video-library-heading">Light Bearers Video Library</h2>
+        <div class="branch-card-grid">
+          <a class="branch-card" href="#top" aria-label="Go to top of the page">
+            <h3>KCO</h3>
+            <p>Main Branch</p>
+          </a>
 
-          <article class="playlist-section" aria-label="Faith & Leadership">
-            <h3>Faith & Leadership</h3>
-            <!--  #playlist-1 -->
-            <div id="playlist-1" class="video-container"></div>
-          </article>
+          <a class="branch-card" href="branches.html" target="_blank">
+            <h3>Meru</h3>
+            <p>Branch 1</p>
+          </a>
 
-          <article class="playlist-section" aria-label="Mentorship & Growth">
-            <h3>Mentorship & Growth</h3>
-            <!-- #playlist-2 -->
-            <div id="playlist-2" class="video-container"></div>
-          </article>
-        </section>
+          <a class="branch-card" href="branches.html" target="_blank">
+            <h3>Nakuru</h3>
+            <p>Branch 2</p>
+          </a>
+        </div>
+      </section>
 
-        <!-- Christian eBooks -->
-        <section id="ebooks" aria-labelledby="ebooks-heading">
-          <h2 id="ebooks-heading">Christian eBooks</h2>
-          <p>Browse through a selection of free Christian eBooks from Project Gutenberg:</p>
-          <ul id="ebook-list" class="ebook-list"></ul>
-        </section>
+      <section id="resources" class="section-shell" aria-labelledby="resources-heading">
+        <div class="section-header">
+          <p class="section-kicker">Learn & Grow</p>
+          <h2 id="resources-heading">Resources</h2>
+          <p>Explore teachings, encouragement, and curated digital resources.</p>
+        </div>
 
-        <!-- Events & Announcements -->
-        <section id="events-announcements" aria-labelledby="announcements-heading">
-          <h2 id="announcements-heading">📢 Announcements & 📅 Upcoming Events</h2>
+        <div class="resources-layout">
+          <div class="resources-main">
+            <section id="video-library" class="content-card" aria-labelledby="video-library-heading">
+              <h2 id="video-library-heading">Light Bearers Video Library</h2>
 
-          <div id="urgent-banner" class="urgent-banner" role="status" aria-live="polite" style="display:none;">
-            <span id="urgent-text"></span>
-            <button id="close-urgent" aria-label="Close urgent announcement">✖</button>
+              <article class="playlist-section" aria-label="Faith and Leadership">
+                <h3>Faith &amp; Leadership</h3>
+                <div id="playlist-1" class="video-container"></div>
+                <button id="load-more-playlist-1" class="load-more-btn" type="button">Load More</button>
+              </article>
+
+              <article class="playlist-section" aria-label="Mentorship and Growth">
+                <h3>Mentorship &amp; Growth</h3>
+                <div id="playlist-2" class="video-container"></div>
+                <button id="load-more-playlist-2" class="load-more-btn" type="button">Load More</button>
+              </article>
+            </section>
+
+            <section id="ebooks" class="content-card" aria-labelledby="ebooks-heading">
+              <h2 id="ebooks-heading">Christian eBooks</h2>
+              <p>Browse through a selection of free Christian eBooks from Project Gutenberg.</p>
+              <ul id="ebook-list" class="ebook-list"></ul>
+              <button id="load-more-ebooks" class="load-more-btn" type="button">Load More</button>
+            </section>
           </div>
 
-          <div class="filter-controls" role="tablist" aria-label="Events and announcements filters">
-            <button class="filter-btn" data-filter="all">All</button>
-            <button class="filter-btn" data-filter="announcement">Announcements</button>
-            <button class="filter-btn" data-filter="event">Events</button>
-          </div>
+          <aside class="resource-sidebar">
+            <section id="daily-verse" class="content-card" aria-labelledby="verse-heading">
+              <h2 id="verse-heading">Daily Bible Verse</h2>
+              <p id="bible-verse">Loading...</p>
+              <p id="bible-reference" class="bible-reference"></p>
+            </section>
 
-          <ul id="announcement-list" class="announcement-list"></ul>
-        </section>     
+            <section class="content-card">
+              <h2>Quick Download</h2>
+              <a class="download-btn" href="/Downloadable/LB Constitution.pdf" download>
+                📄 Download Constitution
+              </a>
+            </section>
+          </aside>
+        </div>
+      </section>
 
-        <!-- Registration
-        <section id="register" aria-labelledby="register-heading">
-          <h2 id="register-heading">Register as a Member</h2>
-          <p>Click below to open the registration form and answer all the questions the best you can:</p>
-          <a class="download-btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdgOBRrP2HYg1IHde9UxKfZ6kkGZG0kPNM3iFpMVJlLjceHQA/viewform" target="_blank" >📋 Register as a Member</a>
-        </section> -->
-      </article>       
+      <section id="events-announcements" class="section-shell" aria-labelledby="announcements-heading">
+        <div class="section-header">
+          <p class="section-kicker">Stay Updated</p>
+          <h2 id="announcements-heading">Announcements & Upcoming Events</h2>
+        </div>
 
+        <div id="urgent-banner" class="urgent-banner" role="status" aria-live="polite" style="display:none;">
+          <span id="urgent-text"></span>
+          <button id="close-urgent" aria-label="Close urgent announcement">✖</button>
+        </div>
 
-      <!-- RIGHT SIDEBAR -->
-      <aside class="sidebar right-sidebar" aria-label="Sidebar">
-        <section id="daily-verse" aria-labelledby="verse-heading">
-          <h2 id="verse-heading">Daily Bible Verse</h2>
-          <p id="bible-verse">Loading...</p>
-          <p id="bible-reference" class="bible-reference"></p>
-        </section>
+        <div class="filter-controls" role="tablist" aria-label="Events and announcements filters">
+          <button class="filter-btn" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="announcement">Announcements</button>
+          <button class="filter-btn" data-filter="event">Events</button>
+        </div>
 
-        <section id="contact-section" class="highlight-target" aria-labelledby="contact-heading">
+        <ul id="announcement-list" class="announcement-list"></ul>
+      </section>
+
+      <section id="contact-section" class="section-shell" aria-labelledby="contact-heading">
+        <div class="section-header">
+          <p class="section-kicker">Get In Touch</p>
           <h2 id="contact-heading">Contact</h2>
+        </div>
+
+        <div class="contact-card">
           <address>
             <p>Email: <a href="mailto:info@lightbearers.org">info@lightbearers.org</a></p>
             <p>Phone: <a href="tel:+1234567890">+1 (234) 567-890</a></p>
           </address>
-        </section>
-      </aside>
-    </main>
+        </div>
+      </section>
 
-    <section id="archives" aria-labelledby="archives-heading">
-          <h2 id="archives-heading">📸 Our Archives</h2>
-          <p>A look back at some memorable moments from our journey:</p>
-          <div class="gallery">
-            <figure>
+      <section id="archives" class="section-shell" aria-labelledby="archives-heading">
+        <div class="section-header">
+          <p class="section-kicker">Our Journey</p>
+          <h2 id="archives-heading">Archives</h2>
+          <p>A look back at some memorable moments from our journey.</p>
+        </div>
+
+        <div class="gallery">
+          <figure>
             <img src="/img/Team.jpg" alt="Team building event 2023" />
             <figcaption>Team building event - 2023</figcaption>
-            </figure>
-            <figure>
+          </figure>
+          <figure>
             <img src="/img/outreach.jpg" alt="Community outreach program 2022" />
             <figcaption>Community outreach program - 2022</figcaption>
-            </figure>
-            <figure>
+          </figure>
+          <figure>
             <img src="/img/Guest speaker.jpg" alt="Mentorship workshop 2021" />
             <figcaption>Mentorship workshop - 2021</figcaption>
-            </figure>
-            <figure>
+          </figure>
+          <figure>
             <img src="/img/fundraiser.jpg" alt="Annual Fundraiser 2020" />
             <figcaption>Annual Fundraiser - 2020</figcaption>
-            </figure>
-            <figure>
+          </figure>
+          <figure>
             <img src="/img/clean-up.jpg" alt="Community Clean-up 2019" />
             <figcaption>Community Clean-up - 2019</figcaption>
-            </figure>
-          </div>
-        </section>
+          </figure>
+        </div>
+      </section>
+    </main>
 
-
-    <!-- FOOTER -->
     <footer class="site-footer">
-      <p>&copy; 2025 Light Bearers. All Rights Reserved.</p>
+      <div class="footer-inner">
+        <div>
+          <strong>Light Bearers</strong>
+          <p>Empowering youth through mentorship, leadership, and community support.</p>
+        </div>
+        <div>
+          <p>&copy; 2025 Light Bearers. All Rights Reserved.</p>
+        </div>
+      </div>
     </footer>
-  </div> 
-  
-
+  </div>
 
   <script src="./js/index.js"></script>
 </body>

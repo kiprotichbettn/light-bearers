@@ -63,7 +63,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    // IMPORTANT: stop here so homepage logic doesn't run on register page
     return;
   }
 
@@ -73,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const ebookApiUrl = "/api/ebooks";
 
-  // Greeting (guarded)
+  // Greeting
   const greetingEl = document.getElementById("greeting");
   if (greetingEl) {
     const currentHour = new Date().getHours();
@@ -88,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
       " Welcome to Light Bearers website where we empower Youth for Social, Economic, and Academic Growth";
   }
 
-  // Program buttons (guarded)
+  // Program buttons
   const programDetails = {
     academic: "Our Academic Support program helps students with tutoring, study groups, and test prep.",
     career: "Our Career Development program offers workshops on resumes, interviews, and job search strategies.",
@@ -106,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Daily Bible verse (guarded)
+  // Daily Bible verse
   async function getBibleVerse() {
     const verseEl = document.getElementById("bible-verse");
     const refEl = document.getElementById("bible-reference");
@@ -131,68 +130,205 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   getBibleVerse();
 
-  // eBooks (guarded)
-  const ebookList = document.getElementById("ebook-list");
-  const loadingMsg = document.getElementById("loading-msg");
+  // =========================================================
+  // LOAD MORE STATE
+  // =========================================================
+  const videoState = {
+    "playlist-1": {
+      items: [],
+      visibleCount: 2,
+      step: 2,
+      containerId: "playlist-1",
+      buttonId: "load-more-playlist-1",
+    },
+    "playlist-2": {
+      items: [],
+      visibleCount: 2,
+      step: 2,
+      containerId: "playlist-2",
+      buttonId: "load-more-playlist-2",
+    },
+  };
 
-  if (ebookList) {
-    fetch(ebookApiUrl)
-      .then((response) => response.json())
-      .then((data) => {
-        if (loadingMsg) loadingMsg.remove();
+  const ebookState = {
+    items: [],
+    visibleCount: 2,
+    step: 2,
+    containerId: "ebook-list",
+    buttonId: "load-more-ebooks",
+  };
 
-        if (data && data.ebooks && Array.isArray(data.ebooks)) {
-          data.ebooks.forEach((book) => {
-            const bookItem = document.createElement("li");
-            const bookLink = document.createElement("a");
+  // =========================================================
+  // RENDER HELPERS
+  // =========================================================
+  function renderVideos(stateKey) {
+    const state = videoState[stateKey];
+    const container = document.getElementById(state.containerId);
+    const button = document.getElementById(state.buttonId);
 
-            bookLink.href = `https://www.gutenberg.org/ebooks/${book.id}`;
-            bookLink.textContent = book.title;
-            bookLink.target = "_blank";
-            bookLink.rel = "noopener noreferrer";
+    if (!container || !button) return;
 
-            bookItem.appendChild(bookLink);
-            ebookList.appendChild(bookItem);
-          });
-        } else {
-          ebookList.innerHTML = "<li>No eBooks found.</li>";
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching eBooks:", error);
-        if (loadingMsg) loadingMsg.textContent = "Failed to load eBooks.";
-      });
-  }
+    container.innerHTML = "";
 
-  // Videos/playlists (already mostly guarded)
-  fetch("/api/videos")
-    .then((res) => res.json())
-    .then((playlists) => {
-      playlists.forEach((playlist, index) => {
-        const containerId = `playlist-${index + 1}`;
-        const container = document.getElementById(containerId);
-        if (!container) return;
+    const visibleItems = state.items.slice(0, state.visibleCount);
 
-        playlist.videos.forEach((video) => {
-          const videoLink = document.createElement("a");
-          videoLink.href = `https://www.youtube.com/watch?v=${video.videoId}`;
-          videoLink.target = "_blank";
-          videoLink.rel = "noopener noreferrer";
+    if (visibleItems.length === 0) {
+      container.innerHTML = "<p>No videos available.</p>";
+      button.classList.add("hidden");
+      return;
+    }
 
-          videoLink.innerHTML = `
-            <img src="${video.thumbnail}" alt="${video.title}" style="width: 100%; max-width: 300px;" />
-            <p>${video.title}</p>
-          `;
+    visibleItems.forEach((video) => {
+      const videoLink = document.createElement("a");
+      videoLink.className = "video-item";
+      videoLink.href = `https://www.youtube.com/watch?v=${video.videoId}`;
+      videoLink.target = "_blank";
+      videoLink.rel = "noopener noreferrer";
 
-          container.appendChild(videoLink);
-        });
-      });
-    })
-    .catch((err) => {
-      console.error("Error loading videos:", err);
+      videoLink.innerHTML = `
+        <img src="${video.thumbnail}" alt="${video.title}" />
+        <div class="title">${video.title}</div>
+      `;
+
+      container.appendChild(videoLink);
     });
 
-  // Urgent banner (guarded)
+    if (state.visibleCount >= state.items.length) {
+      button.classList.add("hidden");
+    } else {
+      button.classList.remove("hidden");
+    }
+  }
+
+  function renderEbooks() {
+    const container = document.getElementById(ebookState.containerId);
+    const button = document.getElementById(ebookState.buttonId);
+
+    if (!container || !button) return;
+
+    container.innerHTML = "";
+
+    const visibleItems = ebookState.items.slice(0, ebookState.visibleCount);
+
+    if (visibleItems.length === 0) {
+      container.innerHTML = "<li>No eBooks found.</li>";
+      button.classList.add("hidden");
+      return;
+    }
+
+    visibleItems.forEach((book) => {
+      const bookItem = document.createElement("li");
+      const bookLink = document.createElement("a");
+
+      bookLink.href = `https://www.gutenberg.org/ebooks/${book.id}`;
+      bookLink.textContent = book.title;
+      bookLink.target = "_blank";
+      bookLink.rel = "noopener noreferrer";
+
+      bookItem.appendChild(bookLink);
+      container.appendChild(bookItem);
+    });
+
+    if (ebookState.visibleCount >= ebookState.items.length) {
+      button.classList.add("hidden");
+    } else {
+      button.classList.remove("hidden");
+    }
+  }
+
+  // =========================================================
+  // LOAD MORE BUTTONS
+  // =========================================================
+  function setupLoadMoreButtons() {
+    const playlist1Btn = document.getElementById("load-more-playlist-1");
+    const playlist2Btn = document.getElementById("load-more-playlist-2");
+    const ebooksBtn = document.getElementById("load-more-ebooks");
+
+    if (playlist1Btn) {
+      playlist1Btn.addEventListener("click", () => {
+        videoState["playlist-1"].visibleCount += videoState["playlist-1"].step;
+        renderVideos("playlist-1");
+      });
+    }
+
+    if (playlist2Btn) {
+      playlist2Btn.addEventListener("click", () => {
+        videoState["playlist-2"].visibleCount += videoState["playlist-2"].step;
+        renderVideos("playlist-2");
+      });
+    }
+
+    if (ebooksBtn) {
+      ebooksBtn.addEventListener("click", () => {
+        ebookState.visibleCount += ebookState.step;
+        renderEbooks();
+      });
+    }
+  }
+
+  setupLoadMoreButtons();
+
+  // =========================================================
+  // EBOOKS
+  // =========================================================
+  async function loadEbooks() {
+    try {
+      const response = await fetch(ebookApiUrl);
+      const data = await response.json();
+
+      if (data && Array.isArray(data.ebooks)) {
+        ebookState.items = data.ebooks;
+        renderEbooks();
+      } else {
+        const ebookList = document.getElementById("ebook-list");
+        if (ebookList) ebookList.innerHTML = "<li>No eBooks found.</li>";
+      }
+    } catch (error) {
+      console.error("Error fetching eBooks:", error);
+      const ebookList = document.getElementById("ebook-list");
+      if (ebookList) ebookList.innerHTML = "<li>Failed to load eBooks.</li>";
+    }
+  }
+
+  loadEbooks();
+
+  // =========================================================
+  // VIDEOS / PLAYLISTS
+  // =========================================================
+  async function loadVideos() {
+    try {
+      const res = await fetch("/api/videos");
+      const playlists = await res.json();
+
+      if (!Array.isArray(playlists)) return;
+
+      if (playlists[0]) {
+        videoState["playlist-1"].items = playlists[0].videos || [];
+        renderVideos("playlist-1");
+      }
+
+      if (playlists[1]) {
+        videoState["playlist-2"].items = playlists[1].videos || [];
+        renderVideos("playlist-2");
+      }
+    } catch (err) {
+      console.error("Error loading videos:", err);
+
+      const container1 = document.getElementById("playlist-1");
+      const container2 = document.getElementById("playlist-2");
+      const btn1 = document.getElementById("load-more-playlist-1");
+      const btn2 = document.getElementById("load-more-playlist-2");
+
+      if (container1) container1.innerHTML = "<p>Failed to load videos.</p>";
+      if (container2) container2.innerHTML = "<p>Failed to load videos.</p>";
+      if (btn1) btn1.classList.add("hidden");
+      if (btn2) btn2.classList.add("hidden");
+    }
+  }
+
+  loadVideos();
+
+  // Urgent banner
   const urgentBanner = document.getElementById("urgent-banner");
   const urgentText = document.getElementById("urgent-text");
   const closeUrgent = document.getElementById("close-urgent");
@@ -210,7 +346,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Events & Announcements (guarded)
+  // Events & Announcements
   const events = [
     {
       title: "Student Leadership Summit",
@@ -301,7 +437,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Contact smooth scroll (guarded)
+  // Contact smooth scroll
   const contactLink = document.getElementById("nav-contact");
   const contactSection = document.getElementById("contact-section");
 
@@ -313,11 +449,11 @@ document.addEventListener("DOMContentLoaded", () => {
       contactSection.classList.add("highlight-contact");
       setTimeout(() => {
         contactSection.classList.remove("highlight-contact");
-      }, 100000);
+      }, 4000);
     });
   }
 
-  // Default: show events (guarded)
+  // Default events tab
   if (itemsList) {
     renderItems("event");
     document.querySelector('.filter-btn[data-filter="event"]')?.classList.add("active");
